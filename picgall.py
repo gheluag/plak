@@ -91,7 +91,7 @@ def find():
             # я не разобралась как через имя выводить картины, поэтому задумка следующая
             # должно было появиться окно с художниками из базы и оттуда уже можно было бы посмотреть id
             # но оно не выводится нормально... выводит только последнюю запись
-            # я пыталась разными способами вывести, но результат один и тот же
+            # я пыталась разными способами вывести, но результат один и тот же, в то время как в консоли все замечательно
             # одну из попыток можно увидеть ниже (закомментированна)
 
             name = entry1.get()
@@ -127,7 +127,7 @@ def find():
             listbox = Listbox(findwindow)
             listbox.place(x = 0, y = 150, width = 500)
             listbox["bg"] = "#a49eba"
-            cursor.execute(f"SELECT * FROM pictures WHERE price <=  '{price}' ")
+            cursor.execute(f"SELECT * FROM pictures WHERE price <=  '{price}' ")  # мне кажется лучше еще и до введенной цены вывести
             for x in cursor.fetchall():
                 viv = f"pieceID: {x[0]}  artistID: {x[1]}   title: {x[2]}   medium: {x[3]}  price: {x[4]}\n\n\n"
                 listbox.insert(0, viv)
@@ -148,13 +148,13 @@ def find():
                 button_op.place(x = 200, y = 90)
                 button_op["bg"] = "#948eab"
                 button_op["activebackground"] = "#7f7994"
-                # cursor.execute(f"SELECT * FROM artist_info  WHERE artistID >= 1")    
-                # for x in cursor.fetchall():
+                cursor.execute(f"SELECT * FROM artist_info  WHERE artistID >= 1")    
+                for x in cursor.fetchall():
                 #     viv = f"artistId: {x[0]}  name: {x[1]}  adress: {x[2]}  town: {x[3]}  country: {x[4]}  postcode: {x[5]}\n\n"
                 #     listb = Listbox(findwindow)
                 #     listb.insert(0, viv)
                 #     listb.place(x = 0, y = 200, width = 500)
-                #     print(viv)
+                    print(x)
             case "техника исполнения":
                 name = Label(findwindow, text = "введите технику исполнения")
                 name.place(x = 200, y = 20)

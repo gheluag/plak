@@ -6,3 +6,7 @@ sold   pieceID: 57  artistID: 44   title: one more    medium: Oil  price: 4536
  customer: ezhik, phone number: 453675, delivery: самовывоз
 
 
+sold   pieceID: 70  artistID: 34   title: revolution and world   medium: Watercolor  price: 675
+ customer: альбина, phone number: 78787989988, delivery: самовывоз
+
+
