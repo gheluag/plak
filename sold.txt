@@ -2,3 +2,7 @@ sold   pieceID: 55  artistID: 44   title: magic city   medium: Ink  price: 4454
  customer: jaba, phone number: 878965, delivery: самовывоз
 
 
+sold   pieceID: 57  artistID: 44   title: one more    medium: Oil  price: 4536
+ customer: ezhik, phone number: 453675, delivery: самовывоз
+
+

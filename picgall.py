@@ -88,6 +88,12 @@ def find():
         
     def opt():
         def name_find():
+            # я не разобралась как через имя выводить картины, поэтому задумка следующая
+            # должно было появиться окно с художниками из базы и оттуда уже можно было бы посмотреть id
+            # но оно не выводится нормально... выводит только последнюю запись
+            # я пыталась разными способами вывести, но результат один и тот же
+            # одну из попыток можно увидеть ниже (закомментированна)
+
             name = entry1.get()
             listbox = Listbox(findwindow)
             listbox.place(x = 0, y = 150, width = 500)
@@ -142,13 +148,13 @@ def find():
                 button_op.place(x = 200, y = 90)
                 button_op["bg"] = "#948eab"
                 button_op["activebackground"] = "#7f7994"
-                cursor.execute(f"SELECT * FROM artist_info")
-                for x in cursor.fetchall():
-                    # viv = f"artistId: {x[0]}  name: {x[1]}  adress: {x[2]}  town: {x[3]}  country: {x[4]}  postcode: {x[5]}\n\n"
-                    # label = Listbox(findwindow)
-                    # label.insert(0, viv)
-                    # label.place(x = 0, y = 300, width = 500)
-                    print(x)
+                # cursor.execute(f"SELECT * FROM artist_info  WHERE artistID >= 1")    
+                # for x in cursor.fetchall():
+                #     viv = f"artistId: {x[0]}  name: {x[1]}  adress: {x[2]}  town: {x[3]}  country: {x[4]}  postcode: {x[5]}\n\n"
+                #     listb = Listbox(findwindow)
+                #     listb.insert(0, viv)
+                #     listb.place(x = 0, y = 200, width = 500)
+                #     print(viv)
             case "техника исполнения":
                 name = Label(findwindow, text = "введите технику исполнения")
                 name.place(x = 200, y = 20)
@@ -203,6 +209,10 @@ def find():
     
 
 def insert():
+
+    # можно было бы сделать еще с доступом, потому что не каждый пользователь может добавлять, так ведь?
+    # но оно и так, по-моему очень мудренное получилось...
+
     def clear():
         ent_addr.delete(0, END)
         ent_cou.delete(0, END)
@@ -215,19 +225,35 @@ def insert():
         ent_pr.delete(0, END)
         ent_title.delete(0, END)
         ent_town.delete(0, END)
+
     def mm(): 
         ins.withdraw()
         window.deiconify()
+
     def dob():
-        newid = ent_id.get()
-        newname = ent_name.get()
-        newadd = ent_addr.get()
-        newtow = ent_town.get()
-        newcou = ent_cou.get()
-        newpost = ent_post.get()
-        cursor.execute("""INSERT INTO artist_info(artistID, name, adress, town, country, postcode)
-        VALUES(?, ?, ?, ?, ?, ?)""",(newid, newname, newadd, newtow, newcou, newpost))
-        db.commit()
+        try:
+            newid = ent_id.get()
+            newname = ent_name.get()
+            newadd = ent_addr.get()
+            newtow = ent_town.get()
+            newcou = ent_cou.get()
+            newpost = ent_post.get()
+            cursor.execute("""INSERT INTO artist_info(artistID, name, adress, town, country, postcode)
+            VALUES(?, ?, ?, ?, ?, ?)""",(newid, newname, newadd, newtow, newcou, newpost))
+            db.commit()
+        except sqlite3.IntegrityError:
+            newid = "09 "
+            newname = "09"
+            newadd = "09"
+            newtow = "09"
+            newcou = "09"
+            newpost = "09"
+            cursor.execute("""INSERT INTO artist_info(artistID, name, adress, town, country, postcode)
+            VALUES(?, ?, ?, ?, ?, ?)""",(newid, newname, newadd, newtow, newcou, newpost))
+            db.commit()
+            cursor.execute(f"DELETE FROM artist_info WHERE artistID = '09'")
+            db.commit()
+
         newidp = ent_idp.get()
         newida = ent_ida.get()
         newtitle = ent_title.get()
@@ -314,16 +340,13 @@ def insert():
     button_mm["bg"] = "#948eab"
     button_mm["activebackground"] = "#7f7994"
 
-
-     
-
     ins.mainloop()
 
 
 window = Tk()
 window.title("Picture Gallery")
 window.geometry("500x300")
-window["bg"] = "#a49eba"
+window["bg"] = "#a49eba"             # фиолетовое царствие, хихи
 great = Label(window, text ="Добро пожаловать в картинную галерею!\n какое действие хотите совершить?", font = "georgia 12")
 great["bg"] = "#a49eba"
 great.place(x = 100, y = 10)
@@ -340,5 +363,6 @@ button_quite = Button(text = "выход", command = quit )
 button_quite.place(x = 400, y = 250)
 button_quite["bg"] = "#948eab"
 button_quite["activebackground"] = "#730e1d"
+
 window.mainloop()
 db.close()
